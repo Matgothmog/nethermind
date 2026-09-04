@@ -85,16 +85,7 @@ internal static class FrameTxPayerResolver
 
     /// <summary>The index of the VERIFY frame that names the payer, skipping an optional leading expiry_verify and deploy frame.</summary>
     /// <remarks>The same prefix grammar <see cref="FrameTxValidation.ValidationWorkGas"/> prices admission against, so the two cannot drift.</remarks>
-    private static int PrefixVerifyIndex(TxFrame[] frames)
-    {
-        int index = FrameTxValidation.IsExpiryVerifyFrame(frames[0]) ? 1 : 0;
-        if (index < frames.Length && FrameTxValidation.IsDeployFrame(frames[index]))
-        {
-            index++;
-        }
-
-        return index;
-    }
+    private static int PrefixVerifyIndex(TxFrame[] frames) => FrameTxValidation.LeadingRunStart(frames);
 
     /// <summary>Structural check that index-0 is a canonical-hash (empty <c>msg</c>) secp256k1 signature by the sender.</summary>
     /// <remarks>Cryptographic verification is a separate upstream gate.</remarks>
